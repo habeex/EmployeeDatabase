@@ -1,0 +1,32 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <!-- Height of each list item -->
+    <dimen name="list_item_height">60dp</dimen>
+    <dimen name="detail_backdrop_height">250dp</dimen>
+    <!--developers list-->
+    <dimen name="avatar_bounds">60dp</dimen>
+    <dimen name="avatar_padding">4dp</dimen>
+    <dimen name="avatar_margin">8dp</dimen>
+    <dimen name="avatar_marginTop">4dp</dimen>
+
+    <dimen name="large_avatar_size">140dp</dimen> <!-- 2 * actionBarSize - 2 * avatar_padding -->
+    <dimen name="large_avatar_marginTop">10dp</dimen><!-- spacing_large - avatar_padding -->
+    <dimen name="large_avatar_margin">2dp</dimen>
+    <dimen name="large_avatar_height">160dp</dimen>
+
+    <item name="match_parent" format="integer" type="dimen">-1</item>
+    <item name="wrap_content" format="integer" type="dimen">-2</item>
+
+    <dimen name="text_padding">16dp</dimen>
+    <dimen name="input_width">230dp</dimen>
+
+    <!--card dimension-->
+
+    <dimen name="card_radius">10dp</dimen>
+    <dimen name="card_elevation">5dp</dimen>
+    <dimen name="card_radius2">15dp</dimen>
+    <dimen name="card_elevation2">10dp</dimen>
+    <dimen name="card_margin">6dp</dimen>
+
+
+</resources>

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/avatar"
+            android:layout_width="@dimen/large_avatar_size"
+            android:layout_height="@dimen/large_avatar_size"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/large_avatar_margin"
+            android:padding="@dimen/avatar_padding"
+            android:src="@drawable/user"
+            app:civ_border_color="@color/semi_transparent_white"
+            app:civ_border_width="10dp"
+            app:elevation="15dp"/>
+
+        <ImageButton
+            android:id="@+id/change_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_add_photo"
+            android:contentDescription="@null"
+            android:layout_alignBottom="@+id/avatar"
+            android:layout_alignRight="@+id/avatar"
+            android:layout_alignEnd="@+id/avatar"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp" />
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/overview"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/name_input"
+            style="@style/Widget.TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/name_text_view"
+                style="@style/Widget.TextEdit"
+                android:hint="@string/first_name"
+                android:inputType="textPersonName" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/last_name_input"
+            style="@style/Widget.TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/last_name_text_view"
+                style="@style/Widget.TextEdit"
+                android:hint="@string/last_name"
+                android:inputType="textPersonName" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/address_input"
+            style="@style/Widget.TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/address_text_view"
+                style="@style/Widget.TextEdit"
+                android:hint="@string/address"
+                android:inputType="textMultiLine" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email_input"
+            style="@style/Widget.TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/email_text_view"
+                style="@style/Widget.TextEdit"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/phone_input"
+            style="@style/Widget.TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/phone_text_view"
+                style="@style/Widget.TextEdit"
+                android:hint="@string/phone"
+                android:inputType="textLongMessage" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/bio_input"
+            style="@style/Widget.TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/bio_text_view"
+                style="@style/Widget.TextEdit"
+                android:hint="@string/employ_bio"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/gender"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/gender"
+                style="@style/spinner_style_2">
+            </Spinner>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/status"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/status"
+                style="@style/spinner_style">
+            </Spinner>
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/employ.details"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/id_input"
+                style="@style/Widget.TextInputLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/id_text_view"
+                    style="@style/Widget.TextEdit"
+                    android:hint="@string/employ_id"
+                    android:inputType="textLongMessage" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/employ_date_input"
+                style="@style/Widget.TextInputLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/employ_date_text_view"
+                    style="@style/Widget.TextEdit"
+                    android:hint="@string/employ_date"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/dsn_input"
+                style="@style/Widget.TextInputLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/dsn_text_view"
+                    style="@style/Widget.TextEdit"
+                    android:hint="@string/designation"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/dpt_input"
+                style="@style/Widget.TextInputLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/dpt_text_view"
+                    style="@style/Widget.TextEdit"
+                    android:hint="@string/department"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/CategoryStyle"
+            android:gravity="center_vertical"
+            android:text="@string/salary_detail"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/salary_input"
+                style="@style/Widget.TextInputLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/salary_text_view"
+                    style="@style/Widget.TextEdit"
+                    android:hint="@string/salary"
+                    android:inputType="textLongMessage" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tax_input"
+                style="@style/Widget.TextInputLayout">
+            </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tax_text_view"
+                    style="@style/Widget.TextEdit"
+                    android:hint="@string/tax_no"
+                    android:inputType="textLongMessage" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/bank_name_input"
+                    style="@style/Widget.TextInputLayout">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/bank_name_text_view"
+                        style="@style/Widget.TextEdit"
+                        android:hint="@string/bank_name"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/bank_acct_input"
+                    style="@style/Widget.TextInputLayout">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/bank_acct_text_view"
+                        style="@style/Widget.TextEdit"
+                        android:hint="@string/bank_acct"
+                        android:inputType="textLongMessage" />
+                </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+        </LinearLayout>
+        </LinearLayout>

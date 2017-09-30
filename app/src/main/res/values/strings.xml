@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">Employee Database</string>
+    <string name="activity_one">Database Form</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_clear">Clear list</string>
+    <string name="action_search">Search</string>
+    <string name="action_Refresh">Refresh</string>
+    <string name="action_save">Save</string>
+    <string name="action_edit">Edit</string>
+
+    <string name="unsaved">Dicard your changes and quit editing</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
+
+    <string name="delete_dialog_message">Delete this Employee</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_error">Error while deleting employee</string>
+    <string name="delete_success">Employee deleted</string>
+
+    <!--gender strings-->
+    <string name="gender_unknown">Unknown</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+
+    <!--status strings-->
+    <string name="status_unknown">Unknown</string>
+    <string name="status_single">Single</string>
+    <string name="status_married">Married</string>
+
+    <!--form strings-->
+    <string name="overview">Overview</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone-No</string>
+    <string name="designation">Designation</string>
+    <string name="department">Department</string>
+    <string name="gender">Gender</string>
+    <string name="status">Status</string>
+    <string name="tax_no">TIN.No</string>
+    <string name="bank_name">Bank Name</string>
+    <string name="bank_acct">Bank Acct</string>
+    <string name="address">Address</string>
+    <string name="salary_detail">Salary \n(&#8358;)</string>
+    <string name="salary">Salary</string>
+    <string name="employ_id">Emp.ID</string>
+    <string name="employ_date">Emp.Date</string>
+    <string name="employ.details">Details</string>
+    <string name="employ_bio">Bio</string>
+    <string name="add_employee">Add an Employee</string>
+    <string name="edit_employee">Edit this Employee</string>
+
+    <string name="call">Call</string>
+    <string name="text">Text</string>
+    <string name="sms">Sms</string>
+
+    <!--other texts-->
+    <string name="empty_text_1">It\'s a bit lonely here..., Ideas are meant to be shared</string>
+    <string name="empty_text_2">Get started by adding an Employee</string>
+    <string name="user_bio">If you think you can, you can. And if you think you can\u00b4t, you\u00b4re right.</string>
+</resources>
