@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import static android.R.attr.id;
 
-public class Details extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class Details extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     //employee content uri
     private Uri mClickedEmployeeUri;
@@ -31,14 +32,14 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
     private CircularImageView profileImage;
 
     private TextView mFirstName, mLastName, mPhone, mEmail, mAddress, mEmpId, mBio, mDesgn, mDept,
-    mGender, mStatus, mSalary, mBank, mTax, mAcct, mEmpDate;
+            mGender, mStatus, mSalary, mBank, mTax, mAcct, mEmpDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        Toolbar toolbar1 = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar1 = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar1);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -49,34 +50,73 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
         //if intent does not contain an employee content uri then we know we have no details
         if (mClickedEmployeeUri == null) {
             Toast.makeText(this, "No Employee Data", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             //initialize a loader
             getLoaderManager().initLoader(0, null, this);
         }
 
-        mFirstName = (TextView)findViewById(R.id.first_name_text_view1);
-        mLastName = (TextView)findViewById(R.id.last_name_text_view1);
-        mAddress = (TextView)findViewById(R.id.address_text_view2);
-        mBio = (TextView)findViewById(R.id.bio_text_view2);
-        mGender = (TextView)findViewById(R.id.gender_text_view2);
-        mStatus = (TextView)findViewById(R.id.status_text_view2);
-        mEmpId = (TextView)findViewById(R.id.id_text_view2);
-        mEmpDate = (TextView)findViewById(R.id.employ_date_text_view2);
-        mDesgn = (TextView)findViewById(R.id.designation_text_view2);
-        mDept = (TextView)findViewById(R.id.dpt_text_view2);
-        mSalary = (TextView)findViewById(R.id.salary_text_view2);
-        mBank = (TextView)findViewById(R.id.bank_name_text_view2);
-        mTax = (TextView)findViewById(R.id.tax_text_view2);
-        mAcct = (TextView)findViewById(R.id.bank_acct_text_view2);
+        mFirstName = (TextView) findViewById(R.id.first_name_text_view1);
+        mLastName = (TextView) findViewById(R.id.last_name_text_view1);
+        mAddress = (TextView) findViewById(R.id.address_text_view2);
+        mBio = (TextView) findViewById(R.id.bio_text_view2);
+        mGender = (TextView) findViewById(R.id.gender_text_view2);
+        mStatus = (TextView) findViewById(R.id.status_text_view2);
+        mEmpId = (TextView) findViewById(R.id.id_text_view2);
+        mEmpDate = (TextView) findViewById(R.id.employ_date_text_view2);
+        mDesgn = (TextView) findViewById(R.id.designation_text_view2);
+        mDept = (TextView) findViewById(R.id.dpt_text_view2);
+        mSalary = (TextView) findViewById(R.id.salary_text_view2);
+        mBank = (TextView) findViewById(R.id.bank_name_text_view2);
+        mTax = (TextView) findViewById(R.id.tax_text_view2);
+        mAcct = (TextView) findViewById(R.id.bank_acct_text_view2);
+        mPhone = (TextView) findViewById(R.id.phone_text_view2);
+        mEmail = (TextView) findViewById(R.id.email_text_view2);
+        phoneButton = (ImageButton) findViewById(R.id.call);
+        textButton = (ImageButton) findViewById(R.id.text);
+        emailButton = (ImageButton) findViewById(R.id.email);
 
-        profileImage = (CircularImageView)findViewById(R.id.avatar1);
+        profileImage = (CircularImageView) findViewById(R.id.avatar1);
+
+        phoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:+2347035446789"));
+                startActivity(callIntent);
+            }
+        });
+
+        textButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent smsIntent = new Intent(Intent.ACTION_SEND);
+                smsIntent.setType("text/plain");
+                smsIntent.putExtra(Intent.EXTRA_TEXT, "Hello");
+                startActivity(Intent.createChooser(smsIntent, "Send Employee an sms via"));
+            }
+        });
+
+        emailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent feedbackEmail = new Intent(Intent.ACTION_SENDTO);
+                feedbackEmail.setData(Uri.parse("mailto:omawumieyekpimi@gmail.com")); // only email apps should handle this
+                feedbackEmail.putExtra(Intent.EXTRA_EMAIL, "");
+                feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, "Official mail");
+                if (feedbackEmail.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(feedbackEmail, "Send Employee a mail via"));
+                }
+            }
+
+        });
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_form, menu);
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
     }
 
@@ -122,7 +162,7 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
                 EmployeeEntry.COLUMN_ACCT,
                 EmployeeEntry.COLUMN_TAX,
                 EmployeeEntry.COLUMN_BIO,
-        EmployeeEntry.COLUMN_IMAGE};
+                EmployeeEntry.COLUMN_IMAGE};
         //this loader will execute the content provider query method on a background thread
         return new CursorLoader(this,
                 mClickedEmployeeUri,
@@ -135,11 +175,11 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         //bail early if the cursor is null or there is less than one row
-        if (cursor == null || cursor.getCount() < 1){
+        if (cursor == null || cursor.getCount() < 1) {
             return;
         }
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             //find the columns of employee attributes that we're interested in
             int firstNameColumnIndex = cursor.getColumnIndex(EmployeeEntry.COLUMN_FIRST_NAME);
             int lastNameColumnIndex = cursor.getColumnIndex(EmployeeEntry.COLUMN_LAST_NAME);
@@ -189,7 +229,7 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
             mEmpDate.setText(date_text);
             mDesgn.setText(dsn_text);
             mDept.setText(dpt_text);
-           mSalary.setText(salary_text);
+            mSalary.setText(salary_text);
             mTax.setText(tax_text);
             mBank.setText(bank_text);
             mAcct.setText(acct_text);
@@ -200,7 +240,7 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
 
 
             //spinners
-            switch (gender_text){
+            switch (gender_text) {
                 case EmployeeEntry.GENDER_MALE:
                     mGender.setText("Male");
                     break;
@@ -211,7 +251,7 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
                     mGender.setText("Unknown");
             }
 
-            switch (status_text){
+            switch (status_text) {
                 case EmployeeEntry.STATUS_SINGLE:
                     mStatus.setText("Single");
                     break;
@@ -244,4 +284,6 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
         mGender.setText("Unknown");//unknown
         mStatus.setText("Unknown");
     }
+
+
 }

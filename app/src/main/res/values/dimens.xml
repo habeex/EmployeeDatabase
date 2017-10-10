@@ -4,8 +4,8 @@
     <dimen name="list_item_height">60dp</dimen>
     <dimen name="detail_backdrop_height">250dp</dimen>
     <!--developers list-->
-    <dimen name="avatar_bounds">60dp</dimen>
-    <dimen name="avatar_padding">4dp</dimen>
+    <dimen name="avatar_bounds">70dp</dimen>
+    <dimen name="avatar_padding">2dp</dimen>
     <dimen name="avatar_margin">8dp</dimen>
     <dimen name="avatar_marginTop">4dp</dimen>
 

@@ -55,9 +55,9 @@ public class EmployeeDbHelper extends SQLiteOpenHelper {
                 + EmployeeEntry.COLUMN_BANK + " TEXT NOT NULL, "
                 + EmployeeEntry.COLUMN_ACCT + " TEXT NOT NULL, "
                 + EmployeeEntry.COLUMN_TAX + " TEXT NOT NULL, "
-                + EmployeeEntry.COLUMN_IMAGE + "BLOB NOT NULL, "
+                + EmployeeEntry.COLUMN_IMAGE + " BLOB NOT NULL, "
                 + EmployeeEntry.COLUMN_EMPLOYEE_GENDER + " INTEGER NOT NULL, "
-                + EmployeeEntry.COLUMN_EMPLOYEE_STATUS + " INTEGER NOT NULL);";
+                + EmployeeEntry.COLUMN_EMPLOYEE_STATUS + " INTEGER NOT NULL " + ");";
         //Execute the SQL statement
         db.execSQL(SQL_CREATE_EMPLOYEES_TABLE);
     }

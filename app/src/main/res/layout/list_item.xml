@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/text_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/text_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:orientation="horizontal"
     android:paddingBottom="8dp"
     android:paddingEnd="16dp"
     android:paddingLeft="16dp"
@@ -25,8 +25,12 @@
         android:layout_marginTop="@dimen/avatar_marginTop"
         android:layout_marginBottom="@dimen/avatar_marginTop"
         android:padding="@dimen/avatar_padding"
-        android:src="@color/avatar_background"
-        android:gravity="center"/>
+        android:src="@drawable/avatar"
+        android:gravity="center"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2dp"
+        app:civ_shadow="true"
+        app:elevation="8dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

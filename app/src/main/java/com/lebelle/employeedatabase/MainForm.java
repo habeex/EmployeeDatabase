@@ -1,5 +1,6 @@
 package com.lebelle.employeedatabase;
 
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -61,11 +62,23 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
      */
     private int mStatus = EmployeeEntry.STATUS_UNKNOWN;
 
-    private boolean mEmployeeChanged = false;
+    private boolean mEmployeeHasChanged = false;
     private boolean hasImageChanged = false;
 
     private TextInputEditText first_name,last_name, address, email, phone, emp_id, emp_date, desgn, dept,
             salary, bio, bank, tax, acct;
+
+    /**
+     * OnTouchListener that listens for any user touches on a View, implying that they are modifying
+     * the view, and we change the mEmployeeHasChanged boolean to true.
+     */
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mEmployeeHasChanged = true;
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,7 +269,7 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == this.RESULT_CANCELED) {
+        if (resultCode == RESULT_CANCELED) {
             return;
         }
         if (requestCode == GALLERY) {
@@ -407,13 +420,6 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
 
     }
 
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            mEmployeeChanged = true;
-            return false;
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -437,7 +443,7 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
         // handle arrow click here
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (!mEmployeeChanged){
+                if (!mEmployeeHasChanged) {
                     finish(); // close this activity and return to preview activity (if there is any)
                     return true;
                 }
@@ -514,34 +520,42 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        //Define a projection that specifies which columns from the database
-        //you will actually use for the query
-        String[] projection = {
-                EmployeeEntry._ID,
-                EmployeeEntry.COLUMN_FIRST_NAME,
-                EmployeeEntry.COLUMN_LAST_NAME,
-                EmployeeEntry.COLUMN_ADDRESS,
-                EmployeeEntry.COLUMN_EMAIL,
-                EmployeeEntry.COLUMN_PHONE,
-                EmployeeEntry.COLUMN_EMPLOYEE_GENDER,
-                EmployeeEntry.COLUMN_EMPLOYEE_STATUS,
-                EmployeeEntry.COLUMN_EMPLOYEE_IDE,
-                EmployeeEntry.COLUMN_EMPLOYMENT_DATE,
-                EmployeeEntry.COLUMN_DESIGNATION,
-                EmployeeEntry.COLUMN_DEPARTMENT,
-                EmployeeEntry.COLUMN_EMPLOYEE_SALARY,
-                EmployeeEntry.COLUMN_BANK,
-                EmployeeEntry.COLUMN_ACCT,
-                EmployeeEntry.COLUMN_TAX,
-                EmployeeEntry.COLUMN_BIO,
-        EmployeeEntry.COLUMN_IMAGE};
-        //this loader will execute the content provider query method on a background thread
-        return new CursorLoader(this,
-                mClickedEmployeeUri,
-                projection,
-                null,
-                null,
-                null);
+        switch (i) {
+            case NEW_EMPLOYEE_LOADER:
+                //Define a projection that specifies which columns from the database
+                //you will actually use for the query
+                String[] projection = {
+                        EmployeeEntry._ID,
+                        EmployeeEntry.COLUMN_FIRST_NAME,
+                        EmployeeEntry.COLUMN_LAST_NAME,
+                        EmployeeEntry.COLUMN_ADDRESS,
+                        EmployeeEntry.COLUMN_EMAIL,
+                        EmployeeEntry.COLUMN_PHONE,
+                        EmployeeEntry.COLUMN_EMPLOYEE_GENDER,
+                        EmployeeEntry.COLUMN_EMPLOYEE_STATUS,
+                        EmployeeEntry.COLUMN_EMPLOYEE_IDE,
+                        EmployeeEntry.COLUMN_EMPLOYMENT_DATE,
+                        EmployeeEntry.COLUMN_DESIGNATION,
+                        EmployeeEntry.COLUMN_DEPARTMENT,
+                        EmployeeEntry.COLUMN_EMPLOYEE_SALARY,
+                        EmployeeEntry.COLUMN_BANK,
+                        EmployeeEntry.COLUMN_ACCT,
+                        EmployeeEntry.COLUMN_TAX,
+                        EmployeeEntry.COLUMN_BIO,
+                        EmployeeEntry.COLUMN_IMAGE};
+                //this loader will execute the content provider query method on a background thread
+                if (mClickedEmployeeUri != null) {
+                    return new CursorLoader(this,
+                            mClickedEmployeeUri,
+                            projection,
+                            null,
+                            null,
+                            null);
+                }
+            default:
+                return null;
+        }
+
     }
 
 

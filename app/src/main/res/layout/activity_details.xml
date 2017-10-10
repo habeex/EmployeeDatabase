@@ -7,17 +7,6 @@
     android:fitsSystemWindows="true"
     tools:context="com.lebelle.employeedatabase.Details">
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <include
-            android:id="@+id/user_card_content"
-            layout="@layout/employee_content" />
-
-    </android.support.v4.widget.NestedScrollView>
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -68,8 +57,8 @@
                     android:layout_margin="@dimen/large_avatar_margin"
                     android:padding="@dimen/avatar_padding"
                     android:src="@drawable/avatar"
-                    app:civ_border_color="@color/semi_transparent_white"
-                    app:civ_border_width="4dp"
+                    app:civ_border_color="@android:color/white"
+                    app:civ_border_width="3dp"
                     app:civ_shadow="true"
                     app:elevation="15dp" />
 
@@ -118,6 +107,17 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <include
+            android:id="@+id/user_card_content"
+            layout="@layout/employee_content" />
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
 

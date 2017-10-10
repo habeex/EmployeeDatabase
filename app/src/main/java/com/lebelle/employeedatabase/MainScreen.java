@@ -52,20 +52,20 @@ public class MainScreen extends AppCompatActivity implements LoaderManager.Loade
         // Attach the adapter to the ListView.
         employeeListView.setAdapter(mCursorAdapter);
         employeeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                    @Override
-                                                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                                                        //go to employee details page
-                                                        Intent intent = new Intent(MainScreen.this, Details.class);
-                                                        Uri clickedEmployeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, id);
-                                                        intent.setData(clickedEmployeeUri);
-                                                        startActivity(intent);
-                                                    }
-                                                });
-        employeeListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //go to employee details page
+                Intent intent = new Intent(MainScreen.this, Details.class);
+                Uri clickedEmployeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, id);
+                intent.setData(clickedEmployeeUri);
+                startActivity(intent);
+            }
+        });
+        employeeListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-             Intent intent = new Intent(MainScreen.this, MainForm.class);
+                Intent intent = new Intent(MainScreen.this, MainForm.class);
                 Uri clickedEmployeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, id);
                 intent.setData(clickedEmployeeUri);
                 startActivity(intent);
@@ -124,7 +124,8 @@ public class MainScreen extends AppCompatActivity implements LoaderManager.Loade
                 EmployeeEntry.COLUMN_BANK,
                 EmployeeEntry.COLUMN_ACCT,
                 EmployeeEntry.COLUMN_TAX,
-                EmployeeEntry.COLUMN_BIO};
+                EmployeeEntry.COLUMN_BIO,
+                EmployeeEntry.COLUMN_IMAGE};
         //this loader will execute the content provider query method on a background thread
         return new CursorLoader(this,
                 EmployeeEntry.CONTENT_URI,

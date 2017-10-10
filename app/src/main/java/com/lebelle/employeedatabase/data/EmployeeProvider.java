@@ -20,6 +20,10 @@ import com.lebelle.employeedatabase.data.EmployeeContract.EmployeeEntry;
  */
 
 public class EmployeeProvider extends ContentProvider{
+    /**
+     * Tag for the log messages
+     */
+    public static final String LOG_TAG = EmployeeProvider.class.getSimpleName();
 
     private static final int EMPLOYEES = 100;
     private static final int EMPLOYEES_ID = 101;
@@ -30,8 +34,6 @@ public class EmployeeProvider extends ContentProvider{
         sUriMatcher.addURI(EmployeeContract.CONTENT_AUTHORITY, EmployeeContract.PATH_EMPLOYEES + "/#", EMPLOYEES_ID);
     }
 
-    /** Tag for the log messages */
-    public static final String LOG_TAG = EmployeeProvider.class.getSimpleName();
 
     /** Database Helper Object*/
     private EmployeeDbHelper mDbHelper;
@@ -73,6 +75,8 @@ public class EmployeeProvider extends ContentProvider{
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI" + uri);
         }
+
+        cursor.setNotificationUri(getContext().getContentResolver(),uri);
         return cursor;
     }
 
