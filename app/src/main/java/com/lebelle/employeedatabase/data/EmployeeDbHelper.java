@@ -65,5 +65,7 @@ public class EmployeeDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // The database is still at version 1, so there's nothing to do be done here.
+        db.execSQL("DROP TABLE IF EXISTS " + EmployeeEntry.TABLE_NAME);
+        onCreate(db);
     }
 }

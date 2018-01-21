@@ -1,6 +1,5 @@
-package com.lebelle.employeedatabase;
+package com.lebelle.employeedatabase.controllers;
 
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -31,6 +30,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.lebelle.employeedatabase.R;
+import com.lebelle.employeedatabase.Utils;
 import com.lebelle.employeedatabase.data.EmployeeContract.EmployeeEntry;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -46,10 +47,12 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
     private ImageButton btn;
     private CircularImageView circularImageView;
     private static final String EMPLOYEE_IMAGE_DIRECTORY = "/lebelleami";
-    private int GALLERY = 1, CAMERA = 2;
+    private static final int GALLERY = 1, CAMERA = 2;
 
     //employee content uri
     private Uri mClickedEmployeeUri;
+
+    private Uri employeeUri;
 
     private Spinner mGenderSpinner, mStatusSpinner;
     /**
@@ -84,7 +87,7 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_form);
-        Toolbar toolbar1 = (Toolbar)findViewById(R.id.toolbar_1);
+        Toolbar toolbar1 = findViewById(R.id.toolbar_1);
         setSupportActionBar(toolbar1);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -93,36 +96,43 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
         Intent intent = getIntent();
         mClickedEmployeeUri = intent.getData();
 
-        mGenderSpinner = (Spinner)findViewById(R.id.gender);
-        mStatusSpinner = (Spinner)findViewById(R.id.status);
-        first_name = (TextInputEditText)findViewById(R.id.name_text_view);
-        last_name = (TextInputEditText)findViewById(R.id.last_name_text_view);
-        address = (TextInputEditText)findViewById(R.id.address_text_view);
-        email = (TextInputEditText)findViewById(R.id.email_text_view);
-        phone = (TextInputEditText)findViewById(R.id.phone_text_view);
-        emp_id = (TextInputEditText)findViewById(R.id.id_text_view);
-        emp_date = (TextInputEditText)findViewById(R.id.employ_date_text_view);
-        desgn = (TextInputEditText)findViewById(R.id.dsn_text_view);
-        dept = (TextInputEditText)findViewById(R.id.dpt_text_view);
-        salary = (TextInputEditText)findViewById(R.id.salary_text_view);
-        bio = (TextInputEditText)findViewById(R.id.bio_text_view);
-        bank = (TextInputEditText)findViewById(R.id.bank_name_text_view);
-        tax = (TextInputEditText)findViewById(R.id.tax_text_view);
-        acct = (TextInputEditText)findViewById(R.id.bank_acct_text_view);
+        Intent detailsIntent = getIntent();
+        employeeUri = detailsIntent.getData();
 
-        circularImageView = (CircularImageView)findViewById(R.id.avatar);
-        btn = (ImageButton)findViewById(R.id.change_avatar);
+        mGenderSpinner = findViewById(R.id.gender);
+        mStatusSpinner = findViewById(R.id.status);
+        first_name = findViewById(R.id.name_text_view);
+        last_name = findViewById(R.id.last_name_text_view);
+        address = findViewById(R.id.address_text_view);
+        email = findViewById(R.id.email_text_view);
+        phone = findViewById(R.id.phone_text_view);
+        emp_id = findViewById(R.id.id_text_view);
+        emp_date = findViewById(R.id.employ_date_text_view);
+        desgn = findViewById(R.id.dsn_text_view);
+        dept = findViewById(R.id.dpt_text_view);
+        salary = findViewById(R.id.salary_text_view);
+        bio = findViewById(R.id.bio_text_view);
+        bank = findViewById(R.id.bank_name_text_view);
+        tax = findViewById(R.id.tax_text_view);
+        acct = findViewById(R.id.bank_acct_text_view);
+
+        circularImageView = findViewById(R.id.avatar);
+        btn = findViewById(R.id.change_avatar);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPictureDialog();
+                mEmployeeHasChanged = true;
             }
         });
 
         if (mClickedEmployeeUri == null){
             setTitle(R.string.add_employee);
             invalidateOptionsMenu();
-        }else {
+        } else if (employeeUri == null) {
+            setTitle(R.string.add_employee);
+            invalidateOptionsMenu();
+        } else {
             setTitle(R.string.edit_employee);
         }
 
@@ -229,12 +239,13 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
     }
     private void showPictureDialog(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Select Action");
+        pictureDialog.setTitle("Select Image Action");
         String[] pictureDialogItems = {
                 "Select photo from gallery",
-                "Capture photo from camera" };
+                "Capture photo from camera", "Cancel"};
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
+                    boolean result = Utils.checkPermission(MainForm.this);
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -256,7 +267,7 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
     public void choosePhotoFromGallary() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
+        galleryIntent.setType("image/*");
         startActivityForResult(galleryIntent, GALLERY);
     }
 
@@ -266,7 +277,7 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_CANCELED) {
@@ -280,6 +291,7 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
                     String path = saveImage(bitmap);
                     Toast.makeText(MainForm.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                     circularImageView.setImageBitmap(bitmap);
+
 
                 } catch (IOException e) {
                     e.printStackTrace();

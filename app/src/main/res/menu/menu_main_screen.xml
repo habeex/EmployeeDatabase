@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.lebelle.employeedatabase.MainScreen">
+    tools:context="com.lebelle.employeedatabase.controllers.MainScreen">
     <item android:id="@+id/action_search"
         android:title="@string/action_search"
         android:icon="@drawable/ic_search"
@@ -12,6 +12,12 @@
         android:id="@+id/action_refresh"
         android:orderInCategory="100"
         android:title="@string/action_Refresh"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_export"
+        android:orderInCategory="100"
+        android:title="@string/action_export"
         app:showAsAction="never" />
 
     <item

@@ -2,8 +2,8 @@
     <string name="app_name">Employee Database</string>
     <string name="activity_one">Database Form</string>
     <string name="action_delete">Delete</string>
-    <string name="action_clear">Clear list</string>
-    <string name="action_search">Search</string>
+    <string name="action_clear">Clear List</string>
+    <string name="action_search">Search Employee</string>
     <string name="action_Refresh">Refresh</string>
     <string name="action_save">Save</string>
     <string name="action_edit">Edit</string>
@@ -59,4 +59,7 @@
     <string name="empty_text_1">It\'s a bit lonely here..., Ideas are meant to be shared</string>
     <string name="empty_text_2">Get started by adding an Employee</string>
     <string name="user_bio">If you think you can, you can. And if you think you can\u00b4t, you\u00b4re right.</string>
+    <string name="delete_all_dialog_message">You are about to delete all employees from the database. \n\n It can\'t be revoked.</string>
+    <string name="action_delete_all">Delete All Employees</string>
+    <string name="action_export">Export To Excel</string>
 </resources>

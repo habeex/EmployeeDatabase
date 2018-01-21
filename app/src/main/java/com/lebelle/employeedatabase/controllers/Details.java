@@ -1,4 +1,4 @@
-package com.lebelle.employeedatabase;
+package com.lebelle.employeedatabase.controllers;
 
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -19,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lebelle.employeedatabase.R;
 import com.lebelle.employeedatabase.data.EmployeeContract.EmployeeEntry;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -33,13 +36,15 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
 
     private TextView mFirstName, mLastName, mPhone, mEmail, mAddress, mEmpId, mBio, mDesgn, mDept,
             mGender, mStatus, mSalary, mBank, mTax, mAcct, mEmpDate;
+    private String email;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        Toolbar toolbar1 = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar1 = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar1);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -55,61 +60,51 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
             getLoaderManager().initLoader(0, null, this);
         }
 
-        mFirstName = (TextView) findViewById(R.id.first_name_text_view1);
-        mLastName = (TextView) findViewById(R.id.last_name_text_view1);
-        mAddress = (TextView) findViewById(R.id.address_text_view2);
-        mBio = (TextView) findViewById(R.id.bio_text_view2);
-        mGender = (TextView) findViewById(R.id.gender_text_view2);
-        mStatus = (TextView) findViewById(R.id.status_text_view2);
-        mEmpId = (TextView) findViewById(R.id.id_text_view2);
-        mEmpDate = (TextView) findViewById(R.id.employ_date_text_view2);
-        mDesgn = (TextView) findViewById(R.id.designation_text_view2);
-        mDept = (TextView) findViewById(R.id.dpt_text_view2);
-        mSalary = (TextView) findViewById(R.id.salary_text_view2);
-        mBank = (TextView) findViewById(R.id.bank_name_text_view2);
-        mTax = (TextView) findViewById(R.id.tax_text_view2);
-        mAcct = (TextView) findViewById(R.id.bank_acct_text_view2);
-        mPhone = (TextView) findViewById(R.id.phone_text_view2);
-        mEmail = (TextView) findViewById(R.id.email_text_view2);
-        phoneButton = (ImageButton) findViewById(R.id.call);
-        textButton = (ImageButton) findViewById(R.id.text);
-        emailButton = (ImageButton) findViewById(R.id.email);
+        mFirstName = findViewById(R.id.first_name_text_view1);
+        mLastName = findViewById(R.id.last_name_text_view1);
+        mAddress = findViewById(R.id.address_text_view2);
+        mBio = findViewById(R.id.bio_text_view2);
+        mGender = findViewById(R.id.gender_text_view2);
+        mStatus = findViewById(R.id.status_text_view2);
+        mEmpId = findViewById(R.id.id_text_view2);
+        mEmpDate = findViewById(R.id.employ_date_text_view2);
+        mDesgn = findViewById(R.id.designation_text_view2);
+        mDept = findViewById(R.id.dpt_text_view2);
+        mSalary = findViewById(R.id.salary_text_view2);
+        mBank = findViewById(R.id.bank_name_text_view2);
+        mTax = findViewById(R.id.tax_text_view2);
+        mAcct = findViewById(R.id.bank_acct_text_view2);
+        mPhone = findViewById(R.id.phone_text_view2);
+        mEmail = findViewById(R.id.email_text_view2);
+        phoneButton = findViewById(R.id.call);
+        textButton = findViewById(R.id.text);
+        emailButton = findViewById(R.id.email);
 
-        profileImage = (CircularImageView) findViewById(R.id.avatar1);
+        profileImage = findViewById(R.id.avatar1);
 
         phoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:+2347035446789"));
-                startActivity(callIntent);
+                callNumber();
             }
         });
 
         textButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent smsIntent = new Intent(Intent.ACTION_SEND);
-                smsIntent.setType("text/plain");
-                smsIntent.putExtra(Intent.EXTRA_TEXT, "Hello");
-                startActivity(Intent.createChooser(smsIntent, "Send Employee an sms via"));
+                sendText();
             }
         });
 
         emailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent feedbackEmail = new Intent(Intent.ACTION_SENDTO);
-                feedbackEmail.setData(Uri.parse("mailto:omawumieyekpimi@gmail.com")); // only email apps should handle this
-                feedbackEmail.putExtra(Intent.EXTRA_EMAIL, "");
-                feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, "Official mail");
-                if (feedbackEmail.resolveActivity(getPackageManager()) != null) {
-                    startActivity(Intent.createChooser(feedbackEmail, "Send Employee a mail via"));
-                }
+                sendEmail();
             }
 
         });
 
+        initCollapsingToolbar();
     }
 
 
@@ -130,8 +125,8 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
             case R.id.action_edit:
                 //edit data input
                 Intent intent = new Intent(Details.this, MainForm.class);
-                Uri clickedEmployeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, id);
-                intent.setData(clickedEmployeeUri);
+                Uri employeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, id);
+                intent.setData(employeeUri);
                 startActivity(intent);
                 //exit activity
                 //finish();
@@ -285,5 +280,59 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
         mStatus.setText("Unknown");
     }
 
+    public void sendEmail() {
+        String email = "mailto:" + mEmail.getText().toString();
+        Intent feedbackEmail = new Intent(Intent.ACTION_SENDTO);
+        feedbackEmail.setData(Uri.parse(email)); // only email apps should handle this
+        feedbackEmail.putExtra(Intent.EXTRA_EMAIL, "");
+        feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, "Official Mail");
+        if (feedbackEmail.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(feedbackEmail, "Send Employee a mail via"));
+        }
+    }
 
+    public void callNumber() {
+        String number = "tel:" + mPhone.getText().toString();
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        String stringToCall = "tel:" + number;
+        callIntent.setData(Uri.parse(stringToCall));
+        startActivity(Intent.createChooser(callIntent, "Call Employee via"));
+    }
+
+    public void sendText() {
+        String firstname = " " + mFirstName.getText().toString() + " " + mLastName.getText().toString();
+        String number1 = "sms:" + mPhone.getText().toString();
+        Intent textIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(number1));
+        String stringToText = "Hello," + firstname + ",";
+        textIntent.putExtra("sms_body", stringToText);
+        startActivity(Intent.createChooser(textIntent, "Send Employee a text via"));
+    }
+
+    private void initCollapsingToolbar() {
+        final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setTitle(" ");
+        final AppBarLayout appBarLayout = findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollrange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollrange == -1) {
+                    scrollrange = appBarLayout.getTotalScrollRange();
+                }
+
+                if (scrollrange + verticalOffset == 0) {
+                    String heading = "" + mFirstName.getText().toString() + " " + mLastName.getText().toString();
+                    collapsingToolbarLayout.setTitle(heading);
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
+    }
 }

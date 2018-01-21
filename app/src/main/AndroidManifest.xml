@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
@@ -17,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainScreen"
+            android:name=".controllers.MainScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -27,22 +28,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainForm"
+            android:name=".controllers.MainForm"
             android:label="@string/activity_one"
             android:theme="@style/AppTheme"
-            android:parentActivityName=".MainScreen">
+            android:parentActivityName=".controllers.MainScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainScreen"/>
+                android:value=".controllers.MainScreen" />
         </activity>
 
 
-        <activity android:name=".Details"
+        <activity
+            android:name=".controllers.Details"
             android:theme="@style/AppTheme"
-            android:parentActivityName=".MainScreen">
+            android:parentActivityName=".controllers.MainScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainScreen"/>
+                android:value=".controllers.MainScreen" />
         </activity>
 
         <provider
