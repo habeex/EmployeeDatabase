@@ -266,13 +266,13 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
 
     public void choosePhotoFromGallary() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryIntent.setType("image/*");
         startActivityForResult(galleryIntent, GALLERY);
     }
 
     private void takePhotoFromCamera() {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA);
     }
 
@@ -288,7 +288,7 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
                 Uri contentURI = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    String path = saveImage(bitmap);
+                    //saveImage(bitmap);
                     Toast.makeText(MainForm.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                     circularImageView.setImageBitmap(bitmap);
 
@@ -361,7 +361,7 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
         circularImageView.buildDrawingCache();
         Bitmap bitmap = circularImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        //bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
         // Check if this is supposed to be a new employee
@@ -397,7 +397,7 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
         values.put(EmployeeEntry.COLUMN_BANK, bankString);
         values.put(EmployeeEntry.COLUMN_TAX, taxString);
         values.put(EmployeeEntry.COLUMN_ACCT, acctString);
-        values.put(EmployeeEntry.COLUMN_IMAGE, data);
+        values.put(EmployeeEntry.COLUMN_IMAGE, Utils.getPictureByteOfArray(bitmap));
         values.put(EmployeeEntry.COLUMN_EMPLOYEE_GENDER, mGender);
         values.put(EmployeeEntry.COLUMN_EMPLOYEE_STATUS, mStatus);
 
@@ -633,8 +633,8 @@ public class MainForm extends AppCompatActivity implements LoaderManager.LoaderC
             bank.setText(bank_text);
             acct.setText(acct_text);
             Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-            circularImageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 200,
-                    200, false));
+
+            circularImageView.setImageBitmap(Utils.getBitmapFromByte(cursor.getBlob(cursor.getColumnIndex(EmployeeEntry.COLUMN_IMAGE))));
 
             //spinners
             switch (gender_text){

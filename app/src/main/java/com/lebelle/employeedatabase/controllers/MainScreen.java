@@ -14,18 +14,21 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.Toast;
 
 import com.lebelle.employeedatabase.R;
 import com.lebelle.employeedatabase.data.EmployeeContract.EmployeeEntry;
 import com.lebelle.employeedatabase.model.EmployeeCursorAdapter;
+import com.lebelle.employeedatabase.model.RecycAdapter;
 
-public class MainScreen extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainScreen extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, RecycAdapter.CustomItemListener{
 
     private static final int EMPLOYEE_LOADER = 0;
 
@@ -33,6 +36,8 @@ public class MainScreen extends AppCompatActivity implements LoaderManager.Loade
     EmployeeCursorAdapter mCursorAdapter;
 
     private Uri clickedEmployeeUri;
+    private RecycAdapter mAdapter;
+    private Cursor mCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,69 +55,38 @@ public class MainScreen extends AppCompatActivity implements LoaderManager.Loade
             }
         });
 
-        ListView employeeListView = findViewById(R.id.list);
+        final RecyclerView employeeListView = findViewById(R.id.list);
         View emptyView = findViewById(R.id.empty_view);
-        employeeListView.setEmptyView(emptyView);
+        // Set the layout for the RecyclerView to be a linear layout, which measures and
+        // positions items within a RecyclerView into a linear list
+        employeeListView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize the adapter and attach it to the RecyclerView
+        mAdapter = new RecycAdapter(this);
+        employeeListView.setAdapter(mAdapter);
 
 
-        // Setup an Adapter to create a list item for each row of pet data in the Cursor.
-        mCursorAdapter = new EmployeeCursorAdapter(this, null);
-        // Attach the adapter to the ListView.
-        employeeListView.setAdapter(mCursorAdapter);
-        employeeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                //go to employee details page
-                Intent intent = new Intent(MainScreen.this, Details.class);
-                clickedEmployeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, id);
-                intent.setData(clickedEmployeeUri);
-                startActivity(intent);
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
             }
-        });
-        employeeListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
+            // Called when a user swipes left or right on a ViewHolder
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, final long employeeId) {
-                AlertDialog.Builder fixDialog = new AlertDialog.Builder(MainScreen.this);
-                fixDialog.setTitle("Select Action");
-                String[] fixDialogItems = {
-                        "Update Employee",
-                        "Delete Employee"};
-                fixDialog.setItems(fixDialogItems,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int which) {
-                                if (which == 0) {
-                                    Intent intent = new Intent(MainScreen.this, MainForm.class);
-                                    Uri clickedEmployeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, employeeId);
-                                    intent.setData(clickedEmployeeUri);
-                                    startActivity(intent);
-                                } else {
-                                    AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainScreen.this);
-                                    deleteDialog.setTitle("Delete");
-                                    deleteDialog.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            //deleteEmployee(employeeId);
-                                            deleteEmployee();
-                                        }
-                                    });
-                                    deleteDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            if (dialog != null) {
-                                                dialog.dismiss();
-                                            }
-                                        }
-                                    });
-                                    deleteDialog.show();
-                                }
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                // Here is where you'll implement swipe to delete
+                int id = (int) viewHolder.itemView.getTag();
+                String stringId = Integer.toString(id);
 
-                            }
+                Uri uri = EmployeeEntry.CONTENT_URI;
+                uri = uri.buildUpon().appendPath(stringId).build();
 
-                        });
-                fixDialog.show();
-                return true;
-            }
-        });
+                getContentResolver().delete(uri, null, null);
+
+                getLoaderManager().restartLoader(EMPLOYEE_LOADER, null, MainScreen.this);            }
+        }).attachToRecyclerView(employeeListView);
+
 
         //start loader
         getLoaderManager().initLoader(EMPLOYEE_LOADER, null, this);
@@ -255,11 +229,79 @@ public class MainScreen extends AppCompatActivity implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mCursorAdapter.swapCursor(cursor);
+        //mCursorAdapter.swapCursor(cursor);
+        mAdapter.swapCursor(cursor);
+        mCursor = cursor;
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
+        //mCursorAdapter.swapCursor(null);
+        mAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onClick(int position) {
+
+        mCursor.moveToPosition(position);
+
+        int id = mCursor.getInt(mCursor.getColumnIndex(EmployeeEntry._ID));
+        //go to employee details page
+        Intent intent = new Intent(MainScreen.this, Details.class);
+        clickedEmployeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, id);
+        intent.setData(clickedEmployeeUri);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onLongClick(int position) {
+        mCursor.moveToPosition(position);
+        final int id = mCursor.getInt(mCursor.getColumnIndex(EmployeeEntry._ID));
+        Toast.makeText(getApplicationContext(), mCursor.getString(mCursor.getColumnIndex(EmployeeEntry.COLUMN_FIRST_NAME)), Toast.LENGTH_LONG).show();
+
+        AlertDialog.Builder fixDialog = new AlertDialog.Builder(MainScreen.this);
+        fixDialog.setTitle("Select Action");
+        String[] fixDialogItems = {
+                "Update Employee",
+                "Delete Employee"};
+        fixDialog.setItems(fixDialogItems, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (i == 0) {
+                    Intent intent = new Intent(MainScreen.this, MainForm.class);
+                    Uri clickedEmployeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, id);
+                    intent.setData(clickedEmployeeUri);
+                    startActivity(intent);
+                } else {
+                    AlertDialog.Builder deleteDialog = new AlertDialog.Builder(MainScreen.this);
+                    deleteDialog.setTitle("Delete");
+                    deleteDialog.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //deleteEmployee(employeeId);
+                            //deleteEmployee();
+
+                            String stringId = Integer.toString(id);
+                            Uri uri = EmployeeEntry.CONTENT_URI;
+                            uri = uri.buildUpon().appendPath(stringId).build();
+                            getContentResolver().delete(uri, null, null);
+                        }
+                    });
+
+                    deleteDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (dialogInterface != null) {
+                                dialogInterface.dismiss();
+                            }
+                        }
+                    });
+                    deleteDialog.show();
+                }
+            }
+        });
+        fixDialog.show();
     }
 }

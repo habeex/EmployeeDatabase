@@ -182,10 +182,12 @@ public class EmployeeProvider extends ContentProvider{
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
+
         switch (match){
             case EMPLOYEES:
                 return updateEmployee(uri, contentValues, selection, selectionArgs);
             case EMPLOYEES_ID:
+
                 selection = EmployeeEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateEmployee(uri, contentValues, selection, selectionArgs);
@@ -322,8 +324,12 @@ public class EmployeeProvider extends ContentProvider{
                 rowsDeleted = database.delete(EmployeeEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case EMPLOYEES_ID:
+                // Get the task ID from the URI path
+                String id = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+
                 selection = EmployeeEntry._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{id};
                 rowsDeleted = database.delete(EmployeeEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
