@@ -20,6 +20,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 public class EmployeeCursorAdapter extends CursorAdapter {
 
+
     /**
      * Constructs a new {@link EmployeeCursorAdapter}.
      *
@@ -68,4 +69,5 @@ public class EmployeeCursorAdapter extends CursorAdapter {
 
 
     }
+
 }
