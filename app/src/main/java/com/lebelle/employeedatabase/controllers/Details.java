@@ -6,8 +6,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -22,10 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lebelle.employeedatabase.R;
+import com.lebelle.employeedatabase.Utils;
 import com.lebelle.employeedatabase.data.EmployeeContract.EmployeeEntry;
 import com.mikhaellopez.circularimageview.CircularImageView;
-
-import static android.R.attr.id;
 
 public class Details extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -37,6 +34,7 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
     private TextView mFirstName, mLastName, mPhone, mEmail, mAddress, mEmpId, mBio, mDesgn, mDept,
             mGender, mStatus, mSalary, mBank, mTax, mAcct, mEmpDate;
     private String email;
+    private Cursor passCursorToForm;
 
 
     @Override
@@ -124,8 +122,9 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
                 return true;
             case R.id.action_edit:
                 //edit data input
+                final int itemId = passCursorToForm.getInt(passCursorToForm.getColumnIndex(EmployeeEntry._ID));
                 Intent intent = new Intent(Details.this, MainForm.class);
-                Uri employeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, id);
+                Uri employeeUri = ContentUris.withAppendedId(EmployeeEntry.CONTENT_URI, itemId);
                 intent.setData(employeeUri);
                 startActivity(intent);
                 //exit activity
@@ -175,6 +174,7 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
         }
 
         if (cursor.moveToFirst()) {
+            passCursorToForm = cursor;
             //find the columns of employee attributes that we're interested in
             int firstNameColumnIndex = cursor.getColumnIndex(EmployeeEntry.COLUMN_FIRST_NAME);
             int lastNameColumnIndex = cursor.getColumnIndex(EmployeeEntry.COLUMN_LAST_NAME);
@@ -229,9 +229,12 @@ public class Details extends AppCompatActivity implements LoaderManager.LoaderCa
             mBank.setText(bank_text);
             mAcct.setText(acct_text);
 
-            Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+            /*Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
             profileImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, 200,
-                    200, false));
+                    200, false));*/
+
+            profileImage.setImageBitmap(Utils.getBitmapFromByte(cursor.getBlob(cursor.getColumnIndex(EmployeeEntry.COLUMN_IMAGE))));
+
 
 
             //spinners
